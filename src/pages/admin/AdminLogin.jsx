@@ -1,50 +1,48 @@
-import React, { useState } from 'react';
+import { useInputValidation } from "6pp";
 import {
-  Avatar,
-  Stack,
+  Button,
   Container,
   Paper,
   TextField,
-  Typography,
-  Button,
-  IconButton,
-  InputAdornment,
+  Typography
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useInputValidation } from '6pp';
-import { Navigate } from 'react-router-dom';
-
-
-const isAdmin = true;
-
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { bgGradient } from "../../constants/color";
+import { adminLogin, getAdmin } from "../../redux/thunks/admin";
 
 const AdminLogin = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const secretKey = useInputValidation("");
+  const { isAdmin } = useSelector((state) => state.auth);
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const dispatch = useDispatch();
+
+  const secretKey = useInputValidation("");
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("submit");
+    dispatch(adminLogin(secretKey.value));
   };
 
-  if(isAdmin) return <Navigate to ="/admin/dashboard"/>
+  useEffect(() => {
+    dispatch(getAdmin());
+  }, [dispatch]);
+
+  if (isAdmin) return <Navigate to="/admin/dashboard" />;
 
   return (
-    <div style={{
-      backgroundImage: "linear-gradient(rgba(225 225 209),rgba(249,159,159))",
-      height: "100vh"
-    }}>
+    <div
+      style={{
+        backgroundImage: bgGradient,
+      }}
+    >
       <Container
         component={"main"}
         maxWidth="xs"
         sx={{
-          padding: 30,
+          height: "100vh",
           display: "flex",
-          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
         }}
       >
@@ -63,29 +61,19 @@ const AdminLogin = () => {
               width: "100%",
               marginTop: "1rem",
             }}
-            onSubmit={submitHandler}>
+            onSubmit={submitHandler}
+          >
             <TextField
               required
               fullWidth
               label="Secret Key"
-              type={showPassword ? 'text' : 'password'}
+              type="password"
               margin="normal"
               variant="outlined"
               value={secretKey.value}
               onChange={secretKey.changeHandler}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleTogglePasswordVisibility}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
             />
+
             <Button
               sx={{
                 marginTop: "1rem",
@@ -102,6 +90,6 @@ const AdminLogin = () => {
       </Container>
     </div>
   );
-}
+};
 
 export default AdminLogin;

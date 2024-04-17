@@ -1,6 +1,7 @@
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import { Avatar, IconButton, ListItem, Stack, Typography } from "@mui/material";
 import React, { memo } from "react";
+import { transformImage } from "../../lib/features";
 
 const UserItem = ({
   user,
@@ -20,13 +21,14 @@ const UserItem = ({
         width={"100%"}
         {...styling}
       >
-        <Avatar />
+        <Avatar src={transformImage(avatar)} />
+
         <Typography
           variant="body1"
           sx={{
-            flexGrow: 1,
+            flexGlow: 1,
             display: "-webkit-box",
-            webkitLineClamp: 1,
+            WebkitLineClamp: 1,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -35,12 +37,13 @@ const UserItem = ({
         >
           {name}
         </Typography>
+
         <IconButton
           size="small"
           sx={{
             bgcolor: isAdded ? "error.main" : "primary.main",
-            color: "gray",
-            "&hover": {
+            color: "white",
+            "&:hover": {
               bgcolor: isAdded ? "error.dark" : "primary.dark",
             },
           }}

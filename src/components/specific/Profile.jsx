@@ -1,38 +1,36 @@
 import React from "react";
 import { Avatar, Stack, Typography } from "@mui/material";
 import {
-  CalendarMonth,
   Face as FaceIcon,
   AlternateEmail as UserNameIcon,
   CalendarMonth as CalendarIcon,
 } from "@mui/icons-material";
 import moment from "moment";
-const Profile = () => {
+import { transformImage } from "../../lib/features";
+
+const Profile = ({ user }) => {
   return (
     <Stack spacing={"2rem"} direction={"column"} alignItems={"center"}>
       <Avatar
+        src={transformImage(user?.avatar?.url)}
         sx={{
           width: 200,
           height: 200,
-          objectFit: "cover",
+          objectFit: "contain",
           marginBottom: "1rem",
           border: "5px solid white",
         }}
       />
-      <ProfileCard heading={"Bio"} text={"Ram ram sa"} />
+      <ProfileCard heading={"Bio"} text={user?.bio} />
       <ProfileCard
         heading={"Username"}
-        text={"@meHarsh"}
+        text={user?.username}
         Icon={<UserNameIcon />}
       />
+      <ProfileCard heading={"Name"} text={user?.name} Icon={<FaceIcon />} />
       <ProfileCard
-        heading={"Name"}
-        text={"Harsh Upraity"}
-        Icon={<FaceIcon />}
-      />
-      <ProfileCard
-        heading={"Name"}
-        text={moment('2024-03-31T18:30:00.000Z').fromNow()}
+        heading={"Joined"}
+        text={moment(user?.createdAt).fromNow()}
         Icon={<CalendarIcon />}
       />
     </Stack>
@@ -48,6 +46,7 @@ const ProfileCard = ({ text, Icon, heading }) => (
     textAlign={"center"}
   >
     {Icon && Icon}
+
     <Stack>
       <Typography variant="body1">{text}</Typography>
       <Typography color={"gray"} variant="caption">
